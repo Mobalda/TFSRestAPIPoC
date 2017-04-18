@@ -21,7 +21,8 @@ namespace TFSRestAPIPoC.API.Controllers
             _configuration = configuration;
         }
 
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        private const string Project = "TFS Rest API PoC";
 
         [HttpGet]
         public IActionResult GetAll()
@@ -33,10 +34,9 @@ namespace TFSRestAPIPoC.API.Controllers
 
             var workItemTrackingHttpClient = visualStudioServicesConnection.GetClient<WorkItemTrackingHttpClient>();
 
-            const string project = "TFS Rest API PoC";
             const string query = "My Queries/All PBI";
 
-            var queryItem = workItemTrackingHttpClient.GetQueryAsync(project, query).Result;
+            var queryItem = workItemTrackingHttpClient.GetQueryAsync(Project, query).Result;
 
             var workItemQueryResult = workItemTrackingHttpClient.QueryByIdAsync(queryItem.Id).Result;
 
@@ -90,10 +90,7 @@ namespace TFSRestAPIPoC.API.Controllers
                 }
             };
 
-            const string project = "TFS Rest API PoC";
-
-            var result =
-                workItemTrackingHttpClient.CreateWorkItemAsync(patchDocument, project, "Product Backlog Item").Result;
+            var result = workItemTrackingHttpClient.CreateWorkItemAsync(patchDocument, Project, "Product Backlog Item").Result;
 
             return Ok(result);
         }
